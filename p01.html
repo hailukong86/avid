@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国南邮银行</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+
+    header {
+        background-color: #ffffff;
+        color: #c12222;
+        padding: 30px;
+        text-align: center;
+    }
+
+    nav {
+        background-color: #c12222;
+        padding: 10px;
+        text-align: center;
+    }
+
+    nav a {
+        color: #ffffff;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    section {
+        padding: 20px;
+        margin: 30px;
+        background-color: #fff;
+    }
+
+    footer {
+        background-color: #c12222;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 15px;
+        line-height: 1.7;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    input[type="text"], input[type="password"], select {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>中国南邮银行</h1>
+</header>
+
+<nav>
+    <a href="#">首页</a>
+    <a href="#">账户信息</a>
+    <a href="#">定期活期互转</a>
+    <a href="#">理财产品</a>
+    <a href="#">转账</a>
+    <a href="#">退出</a>
+</nav>
+
+<section id="login">
+    <h2 style="text-align: center;">登录</h2>
+    <form action="#" method="post">
+        <label for="cardNumber">卡号：</label>
+        <input type="text" id="cardNumber" name="cardNumber" required><br>
+        <label for="password">密码：</label>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" value="登录">
+    </form>
+</section>
+
+<!--账户信息-->
+<section id="accountInfo" style="display: none;">
+    <h2>账户信息</h2>
+    <p id="customerName"></p>
+    <p id="balance"></p>
+    <p>操作历史：</p>
+    <ul id="transactionHistory">
+        <!-- 操作历史将通过 JavaScript 动态添加 -->
+    </ul>
+</section>
+
+<!--转账模块-->
+<section id="transfer" style="display: none;">
+    <h2>转账</h2>
+    <form action="#" method="post">
+        <label for="transferAmount">转账金额：</label>
+        <input type="text" id="transferAmount" name="transferAmount" required><br>
+        <label for="recipient">收款人卡号：</label>
+        <input type="text" id="recipient" name="recipient" required><br>
+        <input type="submit" value="确认转账">
+    </form>
+</section>
+
+<section id="customerList">
+    <!-- 30人的信息将通过 JavaScript 动态添加 -->
+</section>
+
+<footer>
+    <p>&copy; 2024 网上银行仿真系统</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.querySelector('#login form');
+        const accountInfoSection = document.getElementById('accountInfo');
+        const transferSection = document.getElementById('transfer');
+        const customerListSection = document.getElementById('customerList');
+
+        // 假设这是从服务器获取的30人信息的数组
+        const customers = [
+    { name: "Alice Johnson", cardNumber: "8273495120679482", password: "Dg7Kb2W4", balance: 5748.91 },
+    { name: "David Brown", cardNumber: "9357162840236174", password: "Rz6Xs1H9", balance: 1853.04 },
+    { name: "Olivia Martinez", cardNumber: "4018965732183057", password: "Bp5Dm8F3", balance: 4523.64 },
+    { name: "Bob Williams", cardNumber: "5928634019753286", password: "Lm3Rc8N6", balance: 6312.38 },
+    { name: "Sophia Miller", cardNumber: "7249851630728596", password: "Np2Lx9T6", balance: 2956.72 },
+    { name: "Michael Garcia", cardNumber: "1692048573628409", password: "Fx9Wv4U7", balance: 3287.15 },
+    { name: "Emily Johnson", cardNumber: "7409258631748205", password: "Hm4La7V3", balance: 7121.48 },
+    { name: "James Davis", cardNumber: "3629481057318492", password: "Qw8Jp3Z2", balance: 8463.31 },
+    { name: "Bob Martinez", cardNumber: "5381976240356718", password: "Kx6Ps9T3", balance: 4135.16 },
+    { name: "Michael Johnson", cardNumber: "8216395478026341", password: "Yd3Pa5Q2", balance: 2417.45 },
+    { name: "Emma Smith", cardNumber: "2671543980627153", password: "Xt5Fm9N4", balance: 6298.08 },
+    { name: "David Smith", cardNumber: "8159476230841975", password: "Uw6Re3X7", balance: 1859.71 },
+    { name: "John Garcia", cardNumber: "3492871562041895", password: "Zp4Lw9V8", balance: 5632.24 },
+    { name: "Emily Garcia", cardNumber: "6902481573240871", password: "Gr5Fa2X7", balance: 9081.93 },
+    { name: "Michael Davis", cardNumber: "8132947650125437", password: "Ms9Nt4W7", balance: 4269.99 },
+    { name: "Olivia Miller", cardNumber: "1257308496153827", password: "Px8Vn3R6", balance: 3802.72 },
+    { name: "Sophia Rodriguez", cardNumber: "3972185406235947", password: "Cb6Tm8Q9", balance: 6543.12 },
+    { name: "Alice Martinez", cardNumber: "7493028651740832", password: "Ws2Zx8F5", balance: 2781.16 },
+    { name: "Emily Williams", cardNumber: "2038571964728103", password: "Dq7Ns3Y8", balance: 5189.32 },
+    { name: "James Brown", cardNumber: "9842763105728931", password: "Vd4Kr8G5", balance: 7356.47 },
+    { name: "Alice Johnson", cardNumber: "3820497561038274", password: "Ju5Ep2Y9", balance: 1097.61 },
+    { name: "Olivia Jones", cardNumber: "6489270315748209", password: "Lr3Ct9Z6", balance: 4741.38 },
+    { name: "Bob Garcia", cardNumber: "7240958361274850", password: "Fg8Hw4J3", balance: 8235.79 },
+    { name: "Emily Martinez", cardNumber: "5032874196528307", password: "Gt6Xy2R9", balance: 3521.87 },
+    { name: "John Garcia", cardNumber: "8207369415872039", password: "Hr9Ku3V5", balance: 6829.48 },
+    { name: "Sophia Johnson", cardNumber: "1657293801476529", password: "Sp7Md2T9", balance: 2190.16 },
+    { name: "Olivia Brown", cardNumber: "3789426510285739", password: "Xt6Kp3V9", balance: 5973.31 },
+    { name: "David Smith", cardNumber: "9125730465829371", password: "Td7Fa3P5", balance: 4401.59 },
+    { name: "Olivia Smith", cardNumber: "7428309156730584", password: "Gp5Dm8R3", balance: 3185.25 },
+    { name: "Emily Williams", cardNumber: "6318947025873196", password: "Vb4Ks7D2", balance: 8934.76 }
+];
+
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const cardNumber = document.getElementById('cardNumber').value;
+            const password = document.getElementById('password').value;
+
+            // 验证登录信息
+            const customer = customers.find(c => c.cardNumber === cardNumber && c.password === password);
+            if (customer) {
+                loginForm.reset();
+                document.getElementById('login').style.display = 'none';
+                accountInfoSection.style.display = 'block';
+                transferSection.style.display = 'block';
+                displayAccountInfo(customer);
+            } else {
+                alert('卡号或密码错误，请重试！');
+            }
+        });
+
+        function displayAccountInfo(customer) {
+            document.getElementById('customerName').textContent = '用户名：' + customer.name;
+            document.getElementById('balance').textContent = '余额：$' + customer.balance;
+            const transactionHistoryList = document.getElementById('transactionHistory');
+            transactionHistoryList.innerHTML = '';
+            customer.transactionHistory.forEach(transaction => {
+                const listItem = document.createElement('li');
+                listItem.textContent = transaction;
+                transactionHistoryList.appendChild(listItem);
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
