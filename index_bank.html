@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国南邮银行</title>
+    <script src="https://cdn.bootcss.com/vue/2.5.2/vue.min.js"></script>
+    <style>
+        /* 设置页面全局字体为Arial或sans-serif */
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            /* 设置页面边距为0 */
+            padding: 0;
+            /* 设置页面内边距为0 */
+            background-color: #f0f0f0;
+            /* 设置页面背景色为浅灰色 */
+        }
+        /* 设置页眉样式 */
+        
+        header {
+            background-color: #ffffff;
+            /* 设置背景色为白色 */
+            color: #c12222;
+            /* 设置文字颜色为深红色 */
+            padding: 30px;
+            /* 设置内边距为30像素 */
+            text-align: center;
+            /* 文字居中对齐 */
+        }
+        /* 设置导航栏样式 */
+        
+        nav {
+            background-color: #c12222;
+            /* 设置背景色为深红色 */
+            padding: 10px;
+            /* 设置内边距为10像素 */
+            text-align: center;
+            /* 文字居中对齐 */
+        }
+        /* 设置导航链接样式 */
+        
+        nav a {
+            color: #ffffff;
+            /* 设置文字颜色为白色 */
+            text-decoration: none;
+            /* 取消下划线 */
+            margin: 0 10px;
+            /* 设置外边距 */
+            border-radius: 5px;
+            /* 设置圆角 */
+        }
+        /* 设置内容区域样式 */
+        
+        section {
+            padding: 20px;
+            /* 设置内边距为20像素 */
+            margin: 30px;
+            /* 设置外边距为30像素 */
+            background-color: #fff;
+            /* 设置背景色为白色 */
+        }
+        /* 设置页脚样式 */
+        
+        footer {
+            background-color: #c12222;
+            /* 设置背景色为深红色 */
+            color: #fff;
+            /* 设置文字颜色为白色 */
+            text-align: center;
+            /* 文字居中对齐 */
+            padding: 10px;
+            /* 设置内边距为10像素 */
+            position: fixed;
+            /* 设置定位方式为固定定位 */
+            bottom: 0;
+            /* 设置底部距离为0 */
+            width: 100%;
+            /* 设置宽度为100% */
+        }
+        /* 设置表单样式 */
+        
+        form {
+            max-width: 500px;
+            /* 设置最大宽度为500像素 */
+            margin: 0 auto;
+            /* 设置左右居中 */
+            padding: 15px;
+            /* 设置内边距为15像素 */
+            line-height: 1.7;
+            /* 设置行高 */
+            background-color: #f9f9f9;
+            /* 设置背景色为浅灰色 */
+            border: 1px solid #ccc;
+            /* 设置边框为灰色实线 */
+            border-radius: 5px;
+            /* 设置圆角边框 */
+        }
+        /* 设置输入框和选择框样式 */
+        
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            /* 设置宽度为100% */
+            padding: 10px;
+            /* 设置内边距为10像素 */
+            margin: 5px 0;
+            /* 设置外边距 */
+            border: 1px solid #ccc;
+            /* 设置边框为灰色实线 */
+            border-radius: 3px;
+            /* 设置圆角边框 */
+            box-sizing: border-box;
+            /* 设置盒模型为border-box */
+        }
+        /* 设置提交按钮样式 */
+        
+        input[type="submit"] {
+            width: 100%;
+            /* 设置宽度为100% */
+            background-color: #333;
+            /* 设置背景色为深灰色 */
+            color: #fff;
+            /* 设置文字颜色为白色 */
+            padding: 10px;
+            /* 设置内边距为10像素 */
+            border: none;
+            /* 取消边框 */
+            border-radius: 3px;
+            /* 设置圆角边框 */
+            cursor: pointer;
+            /* 设置鼠标样式为手型 */
+        }
+        
+        a {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header><b>中国南邮银行</b></header>
+        <nav>
+            <a @click="nav(0)">首页</a>
+            <!--是Vue.js中的模板语法，其中@click指令绑定了一个点击事件处理函数nav(0)。通常情况下，nav(0)会调用一个名为nav的方法，并传递参数0-->
+            <a @click="nav(0)">{{ user.name? user.name : '登录' }}</a>
+            <!--在<a>标签中使用了插值表达式{{ user.name ? user.name : '登录' }}，它会在用户登录后显示用户的名称，否则显示"登录"。-->
+            <a @click="nav(1)">账户信息</a>
+            <a @click="nav(2)">转账</a>
+            <a @click="nav(3)">定活期互转</a>
+            <a @click="nav(4)">理财</a>
+            <a @click="nav(5)">修改密码</a>
+            <a @click="nav(10)">退出</a>
+        </nav>
+
+        <section id="home">
+            <h2>欢迎访问中国南邮银行</h2>
+        </section>
+
+        <!-- 登录显示 -->
+        <section id="login" v-show="num == 0"><!--使用了Vue.js的指令v-show，根据num的值来控制该部分的显示和隐藏。-->
+            <h2 style="text-align: center;">登录</h2>
+            <!-- 标题 -->
+            <form id="loginForm" action="#" method="GET" @submit.prevent="handleSubmit">
+                <!--@submit.prevent是Vue.js的事件修饰符，阻止表单默认的提交行为，并调用handleSubmit方法。-->
+                <!-- 登录表单 -->
+                <label for="cardNumber">卡号：</label><!--标签用于显示输入框的说明文字。-->
+                <!-- 卡号标签 -->
+                <input type="text" id="cardNumber" name="cardNumber" v-model="login.cardNumber" required><br>
+                <!--使用了v-model指令将输入框和Vue实例中的login.cardNumber属性进行[双向数据绑定]，实现了输入框内容的同步更新。-->
+                <!--设置了required属性，表示该输入框为必填项。-->
+                <!-- 输入卡号 -->
+                <label for="password">密码：</label>
+                <!-- 密码标签 -->
+                <input type="password" id="password" name="password" v-model="login.password" required><br>
+                <!-- 输入密码 -->
+                <input type="submit" value="登录">
+                <!-- 登录按钮 -->
+            </form>
+            <p style="text-align: center;color: rgb(249, 21, 21);" id="errorMessage"></p>
+        </section>
+
+        <!--账户信息显示-->
+        <section id="account" v-show="num == 1">
+            <h2>账户信息</h2>
+            <!-- 标题 -->
+            <p id="customerName"></p>
+            <!-- 用户名 -->
+            <p id="balance"> {{ user.name }} </p>
+            <!-- 余额 -->
+            <p id="time"> 余额 : {{ user.balance }}</p>
+            <!-- 定期or活期 -->
+            <p id="money">存钱方式：{{ user.type}}</p>
+            </p>
+            <p id="money">理财产品：{{ user.li }}</p>
+            </p>
+            <!-- 理财 -->
+            <p>操作历史：</p>
+            <!-- 操作历史标题 -->
+            <ul id="transactionHistory">
+                <!-- 操作历史列表 -->
+                <!-- 操作历史将通过 JavaScript 动态添加 -->
+                <p v-for="i,index in user.his" :key="index">{{i}} </p>
+            </ul>
+            <br />
+            <p><i>账户信息功能页面</i></p>
+        </section>
+
+        <!--转账模块显示-->
+        <section id="transfer" v-show="num == 2" @submit.prevent="handleSubmit1">
+            <h2>转账</h2>
+            <form action="#" method="post">
+                <label for="transferAmount">转账金额：</label>
+                <input type="text" id="transferAmount" name="transferAmount" required v-model="obj.price"><br>
+                <label for="recipient">收款人卡号：</label>
+                <input type="text" id="recipient" name="recipient" required v-model="obj.cardNumber"><br>
+                <input type="submit" value="确认转账">
+            </form>
+        </section>
+
+        <!--定活期互转显示-->
+        <section id="savings" v-show="num == 3">
+            <h2>定活期互转</h2>
+            <br />
+            <label for="timeSelect">选择期限：</label>
+            <select id="timeSelect" v-model="dInfo">
+                <option value="活期">活期</option>
+                <option value="半年期">半年期</option>
+                <option value="一年期">一年期</option>
+                <option value="三年期">三年期</option>
+                <option value="五年期">五年期</option>
+            </select>
+            <button type="submit" @click="addD">提交</button>
+            <br /><br />
+            <p><i>定活期互转功能页面</i></p>
+        </section>
+
+        <!--理财显示-->
+        <section id="investment" v-show="num == 4">
+            <h2>理财</h2>
+            <br />
+            <label for="investmentSelect ">选择理财产品类型：</label>
+            <select id="investmentSelect" v-model="li">
+                <option value="保本收益">保本收益</option>
+                <option value="高风险">高风险</option>
+                <option value="中风险">中风险</option>
+                <option value="低风险">低风险</option>
+                <option value="不购买">不购买</option>
+            </select>
+            <button @click="addL">提交</button>
+            <br /><br />
+            <p><i>理财功能页面</i></p>
+        </section>
+
+        <!--修改密码显示-->
+        <section id="password" v-show="num == 5">
+            <h2>修改密码</h2>
+            <form action="" method="" @submit.prevent="handleSubmit2">
+                <label for="transferAmount">原密码：</label>
+                <input type="text" id="transferAmount" name="transferAmount" required v-model="newInfo.old"><br>
+                <label for="recipient">新密码：</label>
+                <input type="text" id="recipient" name="recipient" required v-model="newInfo.new"><br>
+                <input type="submit" value="修改">
+            </form>
+        </section>
+
+        <!-- 页脚部分显示 -->
+        <footer>版权所有 &copy; 2024 中国南邮银行</footer>
+    </div>
+
+
+
+
+
+    <!--用户信息-->
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    list: [{
+                        name: "Alice Johnson",
+                        cardNumber: "8273495120679482",
+                        password: "Dg7Kb2W4",
+                        balance: 5748.91,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "David Brown",
+                        cardNumber: "9357162840236174",
+                        password: "Rz6Xs1H9",
+                        balance: 1853.04,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Olivia Martinez",
+                        cardNumber: "4018965732183057",
+                        password: "Bp5Dm8F3",
+                        balance: 4523.64,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Bob Williams",
+                        cardNumber: "5928634019753286",
+                        password: "Lm3Rc8N6",
+                        balance: 6312.38,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Sophia Miller",
+                        cardNumber: "7249851630728596",
+                        password: "Np2Lx9T6",
+                        balance: 2956.72,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Michael Garcia",
+                        cardNumber: "1692048573628409",
+                        password: "Fx9Wv4U7",
+                        balance: 3287.15,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Emily Johnson",
+                        cardNumber: "7409258631748205",
+                        password: "Hm4La7V3",
+                        balance: 7121.48,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "James Davis",
+                        cardNumber: "3629481057318492",
+                        password: "Qw8Jp3Z2",
+                        balance: 8463.31,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Bob Martinez",
+                        cardNumber: "5381976240356718",
+                        password: "Kx6Ps9T3",
+                        balance: 4135.16,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Michael Johnson",
+                        cardNumber: "8216395478026341",
+                        password: "Yd3Pa5Q2",
+                        balance: 2417.45,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Emma Smith",
+                        cardNumber: "2671543980627153",
+                        password: "Xt5Fm9N4",
+                        balance: 6298.08,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "David Smith",
+                        cardNumber: "8159476230841975",
+                        password: "Uw6Re3X7",
+                        balance: 1859.71,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "John Garcia",
+                        cardNumber: "3492871562041895",
+                        password: "Zp4Lw9V8",
+                        balance: 5632.24,
+                    }, {
+                        name: "Emily Garcia",
+                        cardNumber: "6902481573240871",
+                        password: "Gr5Fa2X7",
+                        balance: 9081.93,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Michael Davis",
+                        cardNumber: "8132947650125437",
+                        password: "Ms9Nt4W7",
+                        balance: 4269.99,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Olivia Miller",
+                        cardNumber: "1257308496153827",
+                        password: "Px8Vn3R6",
+                        balance: 3802.72,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Sophia Rodriguez",
+                        cardNumber: "3972185406235947",
+                        password: "Cb6Tm8Q9",
+                        balance: 6543.12,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Alice Martinez",
+                        cardNumber: "7493028651740832",
+                        password: "Ws2Zx8F5",
+                        balance: 2781.16,
+                        dInfo: '',
+                        licai: '',
+                        num: 0,
+                        his: []
+                    }, {
+                        name: "Emily Williams",
+                        cardNumber: "2038571964728103",
+                        password: "Dq7Ns3Y8",
+                        balance: 5189.32,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "James Brown",
+                        cardNumber: "9842763105728931",
+                        password: "Vd4Kr8G5",
+                        balance: 7356.47,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Alice Johnson",
+                        cardNumber: "3820497561038274",
+                        password: "Ju5Ep2Y9",
+                        balance: 1097.61,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Olivia Jones",
+                        cardNumber: "6489270315748209",
+                        password: "Lr3Ct9Z6",
+                        balance: 4741.38,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Bob Garcia",
+                        cardNumber: "7240958361274850",
+                        password: "Fg8Hw4J3",
+                        balance: 8235.79,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Emily Martinez",
+                        cardNumber: "5032874196528307",
+                        password: "Gt6Xy2R9",
+                        balance: 3521.87,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "John Garcia",
+                        cardNumber: "8207369415872039",
+                        password: "Hr9Ku3V5",
+                        balance: 6829.48,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Sophia Johnson",
+                        cardNumber: "1657293801476529",
+                        password: "Sp7Md2T9",
+                        balance: 2190.16,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Olivia Brown",
+                        cardNumber: "3789426510285739",
+                        password: "Xt6Kp3V9",
+                        balance: 5973.31,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "David Smith",
+                        cardNumber: "9125730465829371",
+                        password: "Td7Fa3P5",
+                        balance: 4401.59,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Olivia Smith",
+                        cardNumber: "7428309156730584",
+                        password: "Gp5Dm8R3",
+                        balance: 3185.25,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, {
+                        name: "Emily Williams",
+                        cardNumber: "6318947025873196",
+                        password: "Vb4Ks7D2",
+                        balance: 8934.76,
+                        num: 0,
+                        dInfo: '',
+                        licai: '',
+                        his: []
+                    }, ],
+                    login: {
+                        cardNumber: '',
+                        password: ''
+                    },
+                    obj: {
+                        price: '',
+                        cardNumber: ''
+                    },
+                    user: {},
+                    num: 0,
+                    dInfo: '',
+                    li: '',
+                    newInfo: {
+                        old: '',
+                        new: ''
+                    }
+                }
+            },
+            methods: {
+    // 定义名为 handleSubmit 的方法，<负责登录>
+                handleSubmit() {
+        // 初始化一个空数组 a
+                    let a = []
+        // 使用过滤器过滤 this.list 中的数据，筛选出符合条件的数据，存入数组 a
+                    a = this.list.filter(i => i.cardNumber == this.login.cardNumber)
+        // 打印数组 a 的内容到控制台
+                    console.log('123131', a);
+        // 如果数组 a 的长度大于 0，则执行以下操作
+                    if (a.length) {
+            // 如果数组 a 中第一个元素的密码等于登录表单中的密码，则执行以下操作
+                        if (a[0].password == this.login.password) {
+                // 弹出提示框，提示密码正确
+                alert('密码正确');
+                // 将数组 a 中第一个元素赋值给 this.user
+                this.user = a[0];
+            } else {
+                // 弹出提示框，提示密码错误
+                alert('密码错误');
+                // 遍历 this.list 数组
+                this.list.forEach(i => {
+                    // 如果元素 i 的卡号等于数组 a 中第一个元素的卡号，则执行以下操作
+                    if (i.cardNumber == a[0].cardNumber) {
+                        // 如果元素 i 的尝试次数大于等于 2，则弹出提示框，提示账户被冻结
+                        if (i.num >= 2) {
+                            alert(`账户${a[0].cardNumber}已被冻结`);
+                        }
+                        // 尝试次数加 1
+                        i.num++
+                    }
+                })
+            }
+        } else {
+            // 弹出提示框，提示账户不存在
+            alert('账户不存在');
+        }
+    },
+    // 定义名为 nav 的方法，参数为 v
+    nav(v) {
+        // 将参数 v 赋值给 this.num
+        this.num = v
+        // 如果 this.num 等于 10，则执行以下操作
+        if (this.num == 10) {
+            // 清空 this.user、this.login、this.newInfo，并将 this.num 设为 0
+            this.user = {}
+            this.login = {}
+            this.newInfo = {}
+            this.num = 0
+        }
+    },
+    // 定义名为 handleSubmit1 的方法，<负责转账调用被转账方>
+    handleSubmit1() {
+        // 初始化一个空数组 a
+        let a = []
+        // 使用过滤器过滤 this.list 中的数据，筛选出符合条件的数据，存入数组 a
+        a = this.list.filter(i => i.cardNumber == this.obj.cardNumber)
+        // 如果数组 a 的长度大于 0，则执行以下操作
+        if (a.length) {
+            // 遍历 this.list 数组
+            this.list.forEach(i => {
+                // 如果元素 i 的卡号等于数组 a 中第一个元素的卡号，则执行以下操作
+                if (i.cardNumber == a[0].cardNumber) {
+                    // 如果用户余额小于转账金额，则返回，不执行后续操作
+                    if (Number(this.user.balance) < Number(this.obj.price)) {
+                        return
+                    }
+                    // 更新账户余额
+                    i.balance = Number(i.balance) + Number(this.obj.price)
+                    // 弹出提示框，提示转账成功
+                    alert('转账成功！')
+                    // 记录转账历史
+                    i.his.push(`接收来自${this.user.cardNumber}转账${Number(this.obj.price)}`)
+                }
+                // 如果元素 i 的卡号等于当前用户的卡号，则执行以下操作
+                if (i.cardNumber == this.user.cardNumber) {
+                    // 如果用户余额小于转账金额，则弹出提示框，提示余额不足，并返回，不执行后续操作
+                    if (Number(this.user.balance) < Number(this.obj.price)) {
+                        return alert('余额不足')
+                    }
+                    // 更新账户余额
+                    i.balance = Number(this.user.balance) - Number(this.obj.price)
+                    // 记录转账历史
+                    i.his.push(`转出${Number(this.obj.price)}到账户${this.obj.cardNumber}`)
+                }
+            })
+        } else {
+            // 弹出提示框，提示账户不存在
+            alert('账户不存在');
+        }
+    },
+    // 定义名为 handleSubmit2 的方法，<改密码>
+    handleSubmit2() {
+        // 如果输入的旧密码不等于用户的密码，则弹出提示框，提示密码不正确，并返回，不执行后续操作
+        if (this.newInfo.old != this.user.password) {
+            return alert('密码不正确')
+        } else {
+            // 遍历 this.list 数组
+            this.list.forEach(i => {
+                // 如果元素 i 的密码等于输入的旧密码，则执行以下操作
+                if (i.password == this.newInfo.old) {
+                    // 更新密码为新密码
+                    i.password = this.newInfo.new
+                    // 弹出提示框，提示密码修改成功
+                    alert('密码修改成功！')
+                }
+            })
+        }
+    },
+    // 定义名为 change 的方法，参数为 v
+    change(v) {
+        // 输出 this.dInfo 到控制台
+        console.log(this.dInfo)
+    },
+    // 定义名为 change1 的方法，参数为 v
+    change1(v) {
+        // 将事件触发的目标的值赋给 this.li
+        this.li = v.target.value
+    },
+    // 定义名为 addD 的方法
+    addD() {
+        // 遍历 this.list 数组
+        this.list.forEach(i => {
+            // 如果元素 i 的卡号等于当前用户的卡号，则执行以下操作
+            if (i.cardNumber == this.user.cardNumber) {
+                // 记录操作历史
+                i.his.push(`定活期:${this.dInfo}`)
+                // 更新用户类型为 this.dInfo
+                this.user.type = this.dInfo
+            }
+        })
+    },
+    // 定义名为 addL 的方法
+    addL() {
+        // 遍历 this.list 数组
+        this.list.forEach(i => {
+            // 如果元素 i 的卡号等于当前用户的卡号，则执行以下操作
+            if (i.cardNumber == this.user.cardNumber) {
+                // 记录操作历史
+                i.his.push(`理财:${this.li}`)
+                // 更新用户理财信息为 this.li
+                this.user.li = this.li
+            }
+        })
+    }
+}
+        })
+    </script>
+</body>
+
+</html>
